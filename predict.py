@@ -34,7 +34,7 @@ def inference(image_file, wav_file):
     with open("/content/train/test.json", "w") as f:
         f.write(jq_run.stdout.decode('utf-8').strip())
 
-    os.system(f"cd /content/train/one-shot-talking-face && python3 -B test_script.py --img_path /content/train/image.png --audio_path /content/train/audio.wav --phoneme_path /content/train/test.json --save_dir /content/train")
+    os.system(f"cd /content/one-shot-talking-face && python3 -B test_script.py --img_path /content/train/image.png --audio_path /content/train/audio.wav --phoneme_path /content/train/test.json --save_dir /content/train")
     return "/content/train/image_audio.mp4"
 
 class Predictor(BasePredictor):
