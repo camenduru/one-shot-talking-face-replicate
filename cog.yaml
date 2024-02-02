@@ -3,7 +3,7 @@ build:
   python_version: "3.10"
   run:
     - apt update -y && apt install -y software-properties-common python3-launchpadlib && apt update -y && add-apt-repository -y ppa:git-core/ppa && apt update -y
-    - apt install -y g++ aria2 git git-lfs wget libgl1 libglib2.0-0 ffmpeg cmake libgtk2.0-0 jq libtiff5-dev
+    - apt install -y g++ aria2 git git-lfs wget libgl1 libglib2.0-0 ffmpeg cmake libgtk2.0-0 jq
     - pip install torch==1.13.1+cu116 torchvision==0.14.1+cu116 torchaudio==0.13.1 torchtext==0.14.1 torchdata==0.5.1 --extra-index-url https://download.pytorch.org/whl/cu116
     - pip install notebook pickleshare ipywidgets imageio-ffmpeg numpy==1.23.0 pandas pyngrok
     - git clone https://huggingface.co/camenduru/pocketsphinx-20.04-t4 /content/pocketsphinx && cd /content/pocketsphinx && cmake --build build --target install
