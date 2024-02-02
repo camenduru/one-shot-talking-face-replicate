@@ -4,12 +4,26 @@ from cog import BasePredictor, Input, Path
 import sys
 sys.path.append('/content/one-shot-talking-face')
 
-import os, subprocess, torchaudio, torch
+import subprocess, torchaudio, torch
 from PIL import Image
+
+def pad_image(image):
+    w, h = image.size
+    if w == h:
+        return image
+    elif w > h:
+        new_image = Image.new(image.mode, (w, w), (0, 0, 0))
+        new_image.paste(image, (0, (w - h) // 2))
+        return new_image
+    else:
+        new_image = Image.new(image.mode, (h, h), (0, 0, 0))
+        new_image.paste(image, ((h - w) // 2, 0))
+        return new_image
 
 def inference(image_file, wav_file):
     waveform, sample_rate = torchaudio.load(wav_file)
     waveform = torch.mean(waveform, dim=0, keepdim=True)
+    os.makedirs("/content/train", exist_ok=True)
     torchaudio.save("/content/train/audio.wav", waveform, sample_rate, encoding="PCM_S", bits_per_sample=16)
     image = Image.open(image_file)
     image = pad_image(image)
@@ -20,7 +34,7 @@ def inference(image_file, wav_file):
     with open("/content/train/test.json", "w") as f:
         f.write(jq_run.stdout.decode('utf-8').strip())
 
-    os.system(f"cd /content/train/one-shot-talking-face && python3 -B test_script.py --img_path /content/train/image.png --audio_path /content/train/audio.wav --phoneme_path /content/train/test.json --save_dir /content/train/train")
+    os.system(f"cd /content/train/one-shot-talking-face && python3 -B test_script.py --img_path /content/train/image.png --audio_path /content/train/audio.wav --phoneme_path /content/train/test.json --save_dir /content/train")
     return "/content/train/image_audio.mp4"
 
 class Predictor(BasePredictor):
