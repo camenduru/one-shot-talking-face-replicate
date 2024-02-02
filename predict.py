@@ -24,7 +24,6 @@ def inference(image_file, wav_file):
     return "/content/train/image_audio.mp4"
 
 class Predictor(BasePredictor):
-    def setup(self) -> None:
     def predict(
         self,
         image_file: Path = Input(description="Input Image"),
